@@ -1,0 +1,1902 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="ONLINE MMI" />
+		<meta name="author" content="Sulistyo Ponco Nugroho" />
+		<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<style>
+			body {
+				margin:0;
+				padding:0;
+				overflow:hidden;
+				background-color: #000000;
+				font-family: Arial;
+			}
+
+			canvas {
+				display:block;
+			}
+			
+			#overlay {
+				position: fixed;
+				display: none;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: rgba(0,0,0,0.5);
+				z-index: 2;
+			}
+			
+			#leftSideMenu {
+				position: fixed;
+				display: none;
+				width: 320px;
+				height: 100%;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				background-color: #ffffff;
+				z-index: 3;
+			}
+			
+			#leftSideMenu ul {
+				list-style-type: none;
+				padding: 0;
+			}
+
+			#leftSideMenu li a {
+				color: #000000;
+				text-decoration: none;
+				padding: 8px 16px;
+				display: block;
+			}
+			
+			#leftSideMenu li a:hover {
+				color: #ffffff;
+				background-color: #999999;
+			}
+			
+			#rightSideMenu {
+				position: fixed;
+				display: none;
+				width: 320px;
+				height: 100%;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #ffffff;
+				z-index: 3;
+				padding: 10px 0px;
+			}
+			
+			#rightSideMenu ul {
+				list-style-type: none;
+				padding: 0;
+			}
+
+			#rightSideMenu li a {
+				color: #000000;
+				text-decoration: none;
+				padding: 8px 8px;
+				display: block;
+				font-size: 12px;
+			}
+			
+			#rightSideMenu li a:hover {
+				color: #ffffff;
+				background-color: #999999;
+			}
+			
+			#logo {
+				z-index: 1;
+				position: fixed;
+				right: 10px;
+				top: 0px;
+				height: 60px;
+			}
+			
+			#bottomBar {
+				z-index: 1;
+				position: fixed;
+				right: 0px;
+				bottom: 0px;
+				background-color: #000000;
+				color: #bbbbbb;
+				padding: 2px 10px;
+				font-size: 10px;
+				text-align: right;
+			}
+			
+			#roundMenu {
+				position: fixed;
+				right: 10px;
+				bottom: 40px;
+				z-index: 1;
+			}
+			
+			#roundMenu div {
+				margin-bottom: 8px;
+				height: 40px;
+				width: 40px;
+				background-color: #666666;
+				color: #ffffff;
+				border-radius: 20px;
+				line-height: 40px;
+				text-align: center;
+				font-size: 20px;
+				box-shadow: 4px 4px 4px #000000;
+				-moz-box-shadow: 4px 4px 4px #000000;
+				-webkit-box-shadow: 4px 4px 4px #000000;
+				-khtml-box-shadow: 4px 4px 4px #000000;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				-o-user-select: none;
+				user-select: none;
+				cursor: pointer;
+			}
+			
+			#roundMenu div img {
+				margin-top: 9px;
+				height: 22px;
+			}
+			
+			.badge-notif {
+				position: relative;
+			}
+			
+			.badge-notif[data-badge]:after {
+				content:attr(data-badge);
+				position:absolute;
+				top:-5px;
+				right:-5px;
+				font-size:.5em;
+				background:#e53935;
+				color:white;
+				width:18px;
+				height:18px;
+				text-align:center;
+				line-height:18px;
+				border-radius: 50%;
+			}
+			
+			#content {
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			#searchInput {
+				width:268px;
+				display: block;
+				border-radius: 8px;
+				height: 30px;
+				border: none;
+				padding: 4px 16px;
+				background-color: #666666;
+				color: #ffffff;
+			}
+			
+			#menuButton {
+				z-index: 1;
+				position: fixed;
+				display:block;
+				top: 10px;
+				left: 10px;
+				height: 38px;
+				width: 38px;
+				background-color: #666666;
+				color: #ffffff;
+				border-radius: 8px;
+				line-height: 40px;
+				text-align: center;
+				font-size: 20px;
+				box-shadow: 4px 4px 4px #000000;
+				-moz-box-shadow: 4px 4px 4px #000000;
+				-webkit-box-shadow: 4px 4px 4px #000000;
+				-khtml-box-shadow: 4px 4px 4px #000000;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				-o-user-select: none;
+				user-select: none;
+				cursor: pointer;
+			}
+			
+			#searchBox {
+				z-index: 1;
+				position: fixed;
+				display:block;
+				top: 10px;
+				left: 60px;
+				background-color: #666666;
+				color: #bbbbbb;
+				border-radius: 8px;
+				box-shadow: 4px 4px 4px #000000;
+				-moz-box-shadow: 4px 4px 4px #000000;
+				-webkit-box-shadow: 4px 4px 4px #000000;
+				-khtml-box-shadow: 4px 4px 4px #000000;
+			}
+
+			#searchBox ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;	
+				background-color: #f1f1f1;
+			}
+
+			#searchBox li a {
+				color: #000000;
+				text-decoration: none;
+				padding: 8px 16px;
+				display: block;
+			}
+			
+			#searchBox li a:hover {
+				color: #ffffff;
+				background-color: #999999;
+			}
+			
+			textarea:focus, input:focus{
+				outline: none;
+			}
+			
+			*:focus {
+				outline: none;
+			}
+			
+			::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+				color: #bbbbbb;
+				opacity: 1; /* Firefox */
+			}
+
+			:-ms-input-placeholder { /* Internet Explorer 10-11 */
+				color: #bbbbbb;
+			}
+
+			::-ms-input-placeholder { /* Microsoft Edge */
+				color: #bbbbbb;
+			}
+			
+			@media screen and (min-width: 600px) {
+				
+				#menuButton {
+					top: 10px;
+				}
+			
+				#searchBox {
+					top: 10px;
+					width: 300px;
+				}
+			}
+			
+			@media screen and (max-width: 600px) {
+				
+				#menuButton {
+					top: 30px;
+				}
+			
+				#searchBox {
+					top: 30px;
+					right: 10px;
+				}
+			
+				#logo {
+					height: 30px;
+				}
+			}
+			
+		</style>
+    </head>
+    <body>
+		<div id="menuButton">=</div>
+		<div id="searchBox">
+			<input id="searchInput" type="text" placeholder="Search">
+			<ul id="searchList">
+			</ul>
+		</div>
+		<img id="logo" src="/client.png" alt="LOGO LRS">
+		<div id="bottomBar">
+			<span id="status">by Sulistyo Ponco Nugroho</span> |<br/> Ver. 0.0.0.0 OMMMI © 2023 LRS ALL RIGHTS RESERVED
+		</div>
+		<div id="roundMenu">
+			<div id="alarmButton"><img src="/image/notifications_active_FILL0_wght400_GRAD0_opsz48.svg"></div>
+			<div id="oriButton"><img src="/image/fullscreen_FILL0_wght400_GRAD0_opsz48.svg"></div>
+			<div id="plusButton">+</div>
+			<div id="minusButton">-</div>
+		</div>
+		<div id="content" />
+		<div id="overlay" />
+		<div id="leftSideMenu">
+			<h1 style="text-align:center;">Online MMI</h1>
+			<ul id="menuList">
+			</ul>
+		</div>
+		<div id="rightSideMenu" style="overflow-y: scroll;">
+			<h1 style="text-align:center;">Alarm</h1>
+			<ul id="alarmList">
+			</ul>
+		</div>
+		
+		<script src="js/modules/jquery/dist/jquery.min.js"></script>
+		<script src="js/modules/pixi.js/dist/pixi.min.js"></script>
+		<script src="js/modules/socket.io/client-dist/socket.io.min.js"></script>
+
+		<script src="js/modules/jqueryClickAndHold/jquery.click-hold.min.js"></script>
+		
+		<script>
+		//$(document).ready(function() {
+			
+			/* TODO:
+				- FITURE - NOKA
+				- FITURE - BUTTON
+				- BUG - A HREF DOUBLE CLICK??
+			*/
+		
+			let isAllVisible = false;
+					
+			const Direction = {
+				Left: Symbol("left"),
+				Right: Symbol("right"),
+				Up: Symbol("up"),
+				Down: Symbol("down"),
+			}
+			
+			class Point {
+				constructor(x, y) {
+					this.x = x;
+					this.y = y;
+				}
+			}
+			
+			class Variable {
+				constructor() {
+					this.name = "";
+					this.value = false;
+				}
+			}
+			
+			class Region {
+				contructor() {
+					this.code = "";
+					this.name = "";
+					this.point = new Point(0.0, 0.0);
+					this.w = 1920.0;
+					this.h = 1080.0;
+					this.variables = new Array();
+				}
+			}
+			
+			class Style {
+				constructor() {
+					this.isUseFill = true;
+					this.fillColor = 0x666666;
+					
+					this.isUseLine = true;
+					this.lineSize = 1.0;
+					this.lineColor = 0xffffff;
+					
+					this.isUseText = true;
+					this.text = "";
+					this.fontColor = 0xffffff;
+					this.fontSize = 12.0;
+					this.fontFamily = "Arial";
+					this.isFontBold = false;
+					this.isFontItalic = false;
+				}
+				
+				clone() {
+					let style = new Style();
+					
+					style.isUseFill = this.isUseFill;
+					style.fillColor = this.fillColor;
+					
+					style.isUseLine = this.isUseLine;
+					style.lineSize = this.lineSize;
+					style.lineColor = this.lineColor;
+					
+					style.isUseText = this.isUseText;
+					style.text = this.text;
+					style.fontColor = this.fontColor;
+					style.fontSize = this.fontSize;
+					style.fontFamily = this.fontFamily;
+					style.isFontBold = this.isFontBold;
+					style.isFontItalic = this.isFontItalic;
+					
+					return style;
+				}
+			}
+			
+			class Mark {
+				constructor() {
+					this.variable = new Variable();
+					this.style = new Style();
+					this.isReverse = false;
+				}
+			}
+
+			class BaseObject {
+				constructor() {
+					this.point = new Point(0.0, 0.0);
+					this.w = 10.0;
+					this.h = 10.0;
+					
+					this.isHideNA = false;
+					this.baseStyle = new Style();
+					this.marks = new Array();
+					
+					this.obj = new PIXI.Graphics();
+					this.objText = new PIXI.Text();
+					
+					this.desc = "";
+				}
+				
+				addAt(stage) {
+					stage.addChild(this.obj);
+					stage.addChild(this.objText);
+				}
+				
+				getActiveStyle() {
+					for (const mark of this.marks) {
+						if ((!mark.isReverse && mark.variable.value) || (mark.isReverse && !mark.variable.value)) {
+							return mark.style;
+						}
+					}
+					if (this.isHideNA && !isAllVisible) {
+						return null;
+					}
+					return this.baseStyle;
+				}
+				
+				setShape(obj, scale) {
+					obj.drawRect(0.0, 0.0, this.w * scale, this.h * scale);
+				}
+				
+				setFill(activeStyle, scale) {
+					if (activeStyle.isUseFill) {
+						this.obj.beginFill(activeStyle.fillColor);
+						this.setShape(this.obj, scale);
+						this.obj.endFill();
+					}
+				}
+				
+				setLine(activeStyle, scale) {
+					if (activeStyle.isUseLine) {
+						this.obj.lineStyle(activeStyle.lineSize * scale, activeStyle.lineColor, 1);
+						this.setShape(this.obj, scale);
+						this.obj.endFill();
+					}
+				}
+				
+				setText(activeStyle, scale) {
+					if (activeStyle.isUseText) {
+						this.objText.text = activeStyle.text;
+						this.objText.style = new PIXI.TextStyle({
+							fontFamily: activeStyle.fontFamily,
+							fontSize: activeStyle.fontSize * scale * 1.3,
+							fill: activeStyle.fontColor,
+							FontStyle: (activeStyle.isFontItalic) ? "italic" : "normal",
+							fontWeight: (activeStyle.isFontBold) ? "bold" : "normal",
+						});
+						this.objText.anchor.set(0.5, 0.5);
+					}
+				}
+				
+				isOverLap(ori, w, h, scale) {
+					const tolerance = 0;
+					let currenPoint = new Point(ori.x + (this.point.x * scale), ori.y + (this.point.y * scale));
+					let currentW = this.w * scale + tolerance;
+					let currentH = this.h * scale + tolerance;
+					
+					if ((currenPoint.x + currentW) < -tolerance || currenPoint.x > w) {
+						return false;
+					}
+			 
+					if ((currenPoint.y + currentH) < -tolerance || currenPoint.y > h) {
+						return false;
+					}
+					
+					return true;
+				}
+				
+				reDraw(ori, w, h, scale) {
+					let activeStyle = this.getActiveStyle();
+					
+					this.obj.clear();
+					if ((activeStyle == null) || !(this.isOverLap(ori, w, h, scale))) {
+						this.obj.visible = false;
+						this.objText.visible = false;
+						return;
+					}
+					
+					let currenPoint = new Point(ori.x + (this.point.x * scale), ori.y + (this.point.y * scale));
+					let currentW = this.w * scale;
+					let currentH = this.h * scale;
+					
+					this.obj.visible = (currentW > 3 || currentH > 3);
+					this.objText.visible = ((activeStyle.fontSize * scale * 1.3) > 4.5);
+					
+					this.setFill(activeStyle, scale);
+					this.setLine(activeStyle, scale);
+					this.setText(activeStyle, scale);
+					this.obj.position.set(currenPoint.x, currenPoint.y);
+					this.objText.position.set(currenPoint.x + currentW/2, currenPoint.y + currentH/2);
+				}
+				
+				gradient(from, to) {
+					const c = document.createElement("canvas");
+					const ctx = c.getContext("2d");
+					const grd = ctx.createLinearGradient(0,0,100,100);
+					grd.addColorStop(0, from);
+					grd.addColorStop(1, to);
+					ctx.fillStyle = grd;
+					ctx.fillRect(0,0,100,100);
+					return new PIXI.Texture.from(c);
+				}
+			}
+			
+			class RectObject extends BaseObject {
+				constructor() {
+					super();
+				}
+				
+				setShape(obj, scale) {
+					obj.drawRect(0.0, 0.0, this.w * scale, this.h * scale);
+				}
+			}
+			
+			class RoundRectObject extends BaseObject {
+				constructor() {
+					super();
+					this.roundTip = 4.0;
+				}
+				
+				setShape(obj, scale) {
+					obj.drawRoundedRect(0.0, 0.0, this.w * scale, this.h * scale, this.roundTip * scale);
+				}
+			}
+			
+			class EllipseObject extends BaseObject {
+				constructor() {
+					super();
+				}
+				
+				setShape(obj, scale) {
+					obj.drawEllipse(this.w * scale/2, this.h * scale/2, this.w * scale/2, this.h * scale/2);
+				}
+			}
+			
+			class DiamondObject extends BaseObject {
+				constructor() {
+					super();
+				}
+				
+				setShape(obj, scale) {
+					obj.moveTo(this.w * scale/2, 0.0);
+					obj.lineTo(this.w * scale, this.h * scale/2);
+					obj.lineTo(this.w * scale/2, this.h * scale);
+					obj.lineTo(0.0, this.h * scale/2);
+					obj.closePath();
+				}
+			}
+			
+			class ParallelogramObject extends BaseObject {
+				constructor() {
+					super();
+					this.size = 4.0;
+					this.dir = Direction.Left;
+				}
+				
+				setShape(obj, scale) {
+					switch(this.dir) {
+						case Direction.Right:
+							obj.moveTo(this.w * scale, 0.0);
+							obj.lineTo(this.w * scale - this.size * scale, 0.0);
+							obj.lineTo(0.0, this.h * scale);
+							obj.lineTo(this.size * scale, this.h * scale);
+							obj.closePath();
+							break;
+						case Direction.Up:
+							obj.moveTo(0.0, 0.0);
+							obj.lineTo(0.0, this.size * scale);
+							obj.lineTo(this.w * scale, this.h * scale);
+							obj.lineTo(this.w * scale, this.h * scale - this.size * scale);
+							obj.closePath();
+							break;
+						case Direction.Left:
+							obj.moveTo(0.0, 0.0);
+							obj.lineTo(this.w * scale - this.size * scale, this.h * scale);
+							obj.lineTo(this.w * scale, this.h * scale);
+							obj.lineTo(this.size * scale, 0.0);
+							obj.closePath();
+							break;
+						case Direction.Down:
+							obj.moveTo(0.0, this.h * scale);
+							obj.lineTo(this.w * scale, this.size * scale);
+							obj.lineTo(this.w * scale, 0.0);
+							obj.lineTo(0.0, this.h * scale - this.size * scale);
+							obj.closePath();
+							break;
+					}
+				}
+			}
+			
+			class TriangleObject extends BaseObject {
+
+				constructor() {
+					super();
+					this.dir = Direction.Left;
+				}
+				
+				setShape(obj, scale) {
+					switch(this.dir) {
+						case Direction.Right:
+							obj.moveTo(this.w * scale, this.h * scale/2);
+							obj.lineTo(0.0, 0.0);
+							obj.lineTo(0.0, this.h * scale);
+							obj.closePath();
+							break;
+						case Direction.Up:
+							obj.moveTo(this.w * scale/2, 0.0);
+							obj.lineTo(0.0, this.h * scale);
+							obj.lineTo(this.w * scale, this.h * scale);
+							obj.closePath();
+							break;
+						case Direction.Left:
+							obj.moveTo(0.0, this.h * scale/2);
+							obj.lineTo(this.w * scale, this.h * scale);
+							obj.lineTo(this.w * scale, 0.0);
+							obj.closePath();
+							break;
+						case Direction.Down:
+							obj.moveTo(this.w * scale/2, this.h * scale);
+							obj.lineTo(this.w * scale, 0.0);
+							obj.lineTo(0.0, 0.0);
+							obj.closePath();
+							break;
+					}
+				}
+			}
+			
+			class SignalBackgroundObject extends BaseObject {
+				constructor() {
+					super();
+					
+					this.angle = 0.0;
+					this.baseAspectCount = 2; // include emergency aspect
+					this.isUseCFAspect = true;
+					this.isUseShunterAspect = true;
+					
+					this.baseStyle.isUseFill = false;
+					
+					this.baseStyle.isUseLine = true;
+					this.baseStyle.lineSize = 1.0;
+					this.baseStyle.lineColor = 0xffffff;
+					
+					this.baseStyle.isUseText = true;
+				}
+				
+				setShape(obj, scale) {
+					let x = 0.0;
+					let y = 0.0;
+					let w = 0.0;
+					let h = 0.0;
+					
+					y = ((this.h / 2) - (this.h * (13/19) / 2)) * scale + (-this.h/2 * scale);
+					w = this.h * (3/19) * scale;
+					h = this.h * (13/19) * scale;
+					obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+					x += w;
+					
+					if (this.isUseShunterAspect && (!(this.baseAspectCount > 0) && !this.isUseCFAspect)) {
+						y = ((this.h / 2) - (this.h * (3/19) / 2)) * scale + (-this.h/2 * scale);
+						w = this.h * (3/19) * scale;
+						h = this.h * (3/19) * scale;
+						obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+						x += w;
+						
+						y = 0.0 + (-this.h/2 * scale);
+						w = (this.w * scale) - x;
+						h = this.h * scale;
+						obj.drawRoundedRect( x + (-this.w/2 * scale), y, w, h, this.h/2 * scale);
+						x += w;
+					}
+					else if (this.isUseShunterAspect && ((this.baseAspectCount > 0) || this.isUseCFAspect)) {
+						y = ((this.h / 2) - (this.h * (3/19) / 2)) * scale + (-this.h/2 * scale);
+						w = this.h * (3/19) * scale;
+						h = this.h * (3/19) * scale;
+						obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+						x += w;
+					
+						y = 0.0 + (-this.h/2 * scale);
+						w = this.h * scale;
+						h = this.h * scale;
+						obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+						x += w;
+					}
+					
+					if (this.baseAspectCount > 0) {
+						y = ((this.h / 2) - (this.h * (3/19) / 2)) * scale + (-this.h/2 * scale);
+						w = this.h * (3/19) * scale;
+						h = this.h * (3/19) * scale;
+						obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+						x += w;
+						
+						y = 0.0 + (-this.h/2 * scale);
+						w = (this.w * scale) - x - (this.isUseCFAspect ? ((this.h + (this.h * (3/19))) * scale) : 0.0);
+						h = this.h * scale;
+						obj.drawRoundedRect( x + (-this.w/2 * scale), y, w, h, this.h/2 * scale);
+						x += w;
+					}
+					
+					if (this.isUseCFAspect) {
+						y = ((this.h / 2) - (this.h * (3/19) / 2)) * scale + (-this.h/2 * scale);
+						w = this.h * (3/19) * scale;
+						h = this.h * (3/19) * scale;
+						obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+						x += w;
+						
+						y = 0.0 + (-this.h/2 * scale);
+						w = this.h * scale;
+						h = this.h * scale;
+						obj.drawRect( x + (-this.w/2 * scale), y, w, h);
+						x += w;
+					}
+				}
+				
+				reDraw(ori, w, h, scale) {
+					super.reDraw(ori, w, h, scale);
+					
+					let currenPoint = new Point(ori.x + (this.point.x * scale), ori.y + (this.point.y * scale));
+					let currentW = this.w * scale;
+					let currentH = this.h * scale;
+					
+					this.obj.position.set(currenPoint.x + currentW/2, currenPoint.y + currentH/2);
+					this.obj.rotation = Math.PI * 2 * (-this.angle/360);
+				}
+				
+			}
+			
+			class GradientRectObject extends BaseObject {
+				constructor() {
+					super();
+				}
+				
+				setShape(obj, scale) {
+					obj.drawRect(0.0, 0.0, this.w * scale, this.h * scale);
+				}
+				
+				setFill(activeStyle, scale) {
+					if (activeStyle.isUseFill) {
+						this.obj.beginTextureFill(this.gradient('#9ff', '#033'));
+						this.setShape(this.obj, scale);
+						this.obj.endFill();
+					}
+				}
+			}
+			
+			function removeAllChild(stage) {
+				while(stage.children[0]) {
+					stage.removeChild(stage.children[0]);
+				}
+			}
+			
+			function BGRToRGBString(dColor) {
+				return '#' + ("000000" + (((dColor & 0xFF) << 16) + (dColor & 0xFF00) + ((dColor >> 16) & 0xFF)).toString(16)).slice(-6);
+			}
+			
+			function RGBStringToBGR(hex) {
+				const r = parseInt(hex.slice(1, 3), 16),
+					g = parseInt(hex.slice(3, 5), 16),
+					b = parseInt(hex.slice(5, 7), 16);
+				return (r | g << 8 | b << 16);
+			}
+			
+			function RGBStringToRGB(hex) {
+				const r = parseInt(hex.slice(1, 3), 16),
+					g = parseInt(hex.slice(3, 5), 16),
+					b = parseInt(hex.slice(5, 7), 16);
+				return (b | g << 8 | r << 16);
+			}
+			
+			function BGRToRGB(dColor) {
+				return RGBStringToRGB(BGRToRGBString(dColor));
+			}
+			
+			function DECToBIN(dec) {
+				return (dec >>> 0).toString(2);
+			}
+			
+			//
+			
+			//
+			
+			const content = document.getElementById("content");
+			
+			const app = new PIXI.Application({
+				autoResize: true,
+				resolution: devicePixelRatio,
+				antialias: true,
+				autoDensity: true,
+				resolution: 2,
+			});
+			content.append(app.view);
+			
+			let oriPoint = new Point(0.0, 0.0);
+			let startPoint = null;
+			let endPoint = null;
+			let distance = new Point(0.0,0.0);
+			
+			let scale = 1.0;
+			let zoomFactor = scale;
+			let prevZoomFactor = scale;
+			const zoomIntensity = 0.1;
+			
+			let isDragable = false;
+			
+			let startPinchLength = 0.0;
+			let startScale = scale;
+			
+			let layoutObjects = new Array();
+			let variables = new Array();
+			let regions = new Array();
+			
+			//
+			
+			function downListener(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				
+				if (event.type == 'touchstart' || event.type == 'touchmove' || event.type == 'touchend' || event.type == 'touchcancel') {
+					var evt = (typeof event.originalEvent === 'undefined') ? event : event.originalEvent;
+					var touches = evt.touches || evt.changedTouches;
+					if (touches.length == 1) {
+						isDragable = true;
+						startPoint = new Point(touches[0].pageX, touches[0].pageY);
+					} else if (touches.length == 2) {
+						isDragable = false;
+						const x =  touches[1].pageX - touches[0].pageX;
+						const y =  touches[1].pageY - touches[0].pageY;
+						startPinchLength = Math.sqrt( x*x + y*y );
+						startScale = scale;
+					}
+				} else {
+					isDragable = true;
+					startPoint = new Point(event.clientX, event.clientY);
+				}
+				if (isDragable) {
+					distance.x = startPoint.x - oriPoint.x;
+					distance.y = startPoint.y - oriPoint.y;
+				}
+			}
+			
+			function moveListener(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				
+				if (event.type == 'touchstart' || event.type == 'touchmove' || event.type == 'touchend' || event.type == 'touchcancel') {
+					var evt = (typeof event.originalEvent === 'undefined') ? event : event.originalEvent;
+					var touches = evt.touches || evt.changedTouches;
+					if (touches.length == 1) {
+						endPoint = new Point(touches[0].pageX, touches[0].pageY);
+					} else if (touches.length == 2) {
+						const x =  touches[1].pageX - touches[0].pageX;
+						const y =  touches[1].pageY - touches[0].pageY;
+						const endPinchLength = Math.sqrt( x*x + y*y );
+						
+						zoomFactor = startScale * endPinchLength / startPinchLength;
+						let mX = touches[0].pageX + x/2;
+						let mY = touches[0].pageY + y/2;
+						
+						oriPoint.x = mX - (((mX - oriPoint.x) / prevZoomFactor) * zoomFactor);
+						oriPoint.y = mY - (((mY - oriPoint.y) / prevZoomFactor) * zoomFactor);
+						
+						scale = zoomFactor;
+						prevZoomFactor = zoomFactor;
+					}
+				} else {
+					endPoint = new Point(event.clientX, event.clientY);
+				}
+				if (isDragable) {
+					oriPoint.x = endPoint.x - distance.x;
+					oriPoint.y = endPoint.y - distance.y;
+				}
+				
+				refreshLayoutView();
+			}
+			
+			function upListener(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				
+				startPoint = null;
+				endPoint = null;
+				isDragable = false;
+				
+				zoomFactor = scale;
+				prevZoomFactor = scale;
+				startScale = scale;
+				
+				refreshLayoutView();
+			}
+			
+			function wheelListener(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				
+				setZoom(event.deltaY, event.pageX, event.pageY);
+			}
+			
+			function moveViewTo(x, y, w, h) {
+				oriPoint.x = x;
+				oriPoint.y = y;
+				
+				if ((app.screen.width/w) > (app.screen.height/h)) {
+					scale = app.screen.width/w;
+				} else {
+					scale = app.screen.height/h;
+				}
+				zoomFactor = scale;
+				prevZoomFactor = scale;
+				startScale = scale;
+				
+				$("#searchInput").val('');
+				$("#searchList").hide();
+				
+				refreshLayoutView();
+			}
+			
+			function hideMenu() {
+				$("#rightSideMenu").hide();
+				$("#leftSideMenu").hide();
+				$("#overlay").hide();
+			}
+			
+			function showMenu() {
+				$("#leftSideMenu").show();
+				$("#overlay").show();
+			}
+			
+			function hideAlarm() {
+				$("#rightSideMenu").hide();
+				$("#overlay").hide();
+			}
+			
+			function showAlarm() {
+				$("#rightSideMenu").show();
+				$("#overlay").show();
+			}
+			
+			function setMenu() {
+				$('#menuList li').remove();
+				
+				for (let i=0; i<views.length; i++) {
+					$("#menuList").append('<li><a href="#" onclick="hideMenu(); changeView('+ i + '); return false;">'+ views[i].name +'</a></li>');
+				}
+			}
+			
+			function changeView(index) {
+				
+				if (activeViewIndex == index) return;
+				activeViewIndex = index;
+				socket.emit('getView', index);
+			}
+			
+			$("#overlay").click(function (e, n) {
+				e.preventDefault();
+				e.stopPropagation();
+				
+				hideMenu();
+				hideAlarm();
+			});
+			
+			$("#menuButton").click(function (e, n) {
+				e.preventDefault();
+				e.stopPropagation();
+				
+				showMenu();
+			});
+			
+			$("#alarmButton").click(function (e, n) {
+				e.preventDefault();
+				e.stopPropagation();
+				
+				showAlarm();
+			});
+			
+			$("#oriButton").click(function (e, n) {
+				e.preventDefault();
+				e.stopPropagation();
+				
+				setOri();
+				refreshLayoutView();
+
+				// var element = document.querySelector("body");
+				// if (document.fullscreenElement === null) {
+				// 	element.requestFullscreen();
+				// } else {
+				// 	document.exitFullscreen();
+				// }
+				// refreshLayoutView();
+			});
+			
+			$("#plusButton").clickAndHold(function (e, n) {
+				e.preventDefault();
+				e.stopPropagation();
+				
+				setZoom(-1, app.screen.width/2, app.screen.height/2);
+			});
+			
+			
+			$("#minusButton").clickAndHold(function (e, n) {
+				e.preventDefault();
+				e.stopPropagation();
+				
+				setZoom(1, app.screen.width/2, app.screen.height/2);
+			});
+			
+			$("#searchInput").on('change keyup paste', function () {
+				const value = $("#searchInput").val().trim().toLowerCase();
+				
+				if (value.length <= 0) {
+					$("#searchList").hide();
+					return;
+				}
+				
+				$('#searchList li').remove();
+				let searchList = [];
+				for (const region of regions) {
+					if ((region.name.toLowerCase().indexOf(value) >= 0) || (region.code.toLowerCase().indexOf(value) >= 0)) {
+						searchList.push(region.name + " (" + region.code + ")");
+						$("#searchList").append('<li><a href="#" onclick="moveViewTo('+ region.point.x + ',' + region.point.y + ',' + region.w + ',' + region.h + '); return false;">'+ region.name + " (" + region.code + ")" +'</a></li>');
+					}
+				}
+				
+				if (searchList.length <= 0) {
+					$("#searchList").hide();
+				} else {
+					$("#searchList").show();
+				}
+			});
+			
+			function setOri() {
+				oriPoint.x = 0;
+				oriPoint.y = 75;
+				ws = app.screen.width / activeView.w;
+				hs = (app.screen.height-75) / activeView.h;
+				scale = zoomFactor = prevZoomFactor = (ws > hs) ? ws : hs; 
+			}
+			
+			function setZoom(delta, x, y) {
+				if (delta < 0) {
+					zoomFactor *= (1.0 + zoomIntensity);
+				}
+				if (delta > 0) {
+					zoomFactor /= (1.0 + zoomIntensity);
+				}
+				
+				let mX = x;
+				let mY = y;
+				
+				oriPoint.x = mX - (((mX - oriPoint.x) / prevZoomFactor) * zoomFactor);
+				oriPoint.y = mY - (((mY - oriPoint.y) / prevZoomFactor) * zoomFactor);
+				
+				scale = zoomFactor;
+				prevZoomFactor = zoomFactor;
+
+				refreshLayoutView();
+			}
+			
+			function setRegion(pRegion) {
+			
+				const region = new Region();
+				region.code = pRegion.code;
+				region.name = pRegion.name;
+				region.point = new Point(pRegion.x, pRegion.y);
+				region.w = pRegion.w;
+				region.h = pRegion.h;
+				region.variables = new Array();
+				region.alarms = new Array();
+				
+				for (const pVariable of pRegion.variables) {
+					
+					let variable = new Variable();
+					variable.name = pVariable.name;
+					region.variables.push(variable);
+					variables.push(variable);
+				}
+				
+				regions.push(region);
+			}
+			
+			function getVariable(name) {
+				for (let i=0; i<variables.length; i++) {
+					if (variables[i].name == name) {
+						return variables[i];
+					}
+				}
+				return new Variable();
+			}
+			
+			function setLayout(allText, x, y) {
+				rows = allText.split('\r\n');
+				
+				for (let i=rows.length-1; i>=0; i--) {
+					const row = rows[i];
+					
+					columns = row.split(',');
+					
+					let layoutObject;
+					let mark;
+					switch (columns[1]) {
+					case "Buzzer":
+						layoutObject = new RectObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = 0xcccccc;
+						
+						layoutObject.baseStyle.isUseLine = true;
+						layoutObject.baseStyle.lineSize = 1.0;
+						layoutObject.baseStyle.lineColor = 0xffffff;
+						
+						layoutObject.baseStyle.isUseText = true;
+						layoutObject.baseStyle.text = "BUZZER";
+						layoutObject.baseStyle.fontColor = 0x000000;
+						layoutObject.baseStyle.fontSize = 8.0;
+						layoutObject.baseStyle.fontFamily = "Arial";
+						layoutObject.baseStyle.isFontBold = false;
+						layoutObject.baseStyle.isFontItalic = false;
+						
+						mark = new Mark();
+						mark.variable.value = columns[14];
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[15]));
+						mark.style.fontColor = 0xffffff;
+						layoutObject.marks.push(mark);
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Label":
+						layoutObject = new RectObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						//layoutObject.isHideNA = parseInt(columns[23]);
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = BGRToRGB(parseInt(columns[30]));
+						
+						layoutObject.baseStyle.isUseLine = (parseInt(columns[31]) == 1);
+						
+						layoutObject.baseStyle.isUseText = true;
+						layoutObject.baseStyle.text = columns[19];
+						layoutObject.baseStyle.fontColor = BGRToRGB(parseInt(columns[29]));
+						layoutObject.baseStyle.fontSize = parseInt(columns[33]);
+						layoutObject.baseStyle.fontFamily = columns[32];
+						layoutObject.baseStyle.isFontBold = (parseInt(columns[34]) == -1);
+						layoutObject.baseStyle.isFontItalic = (parseInt(columns[35]) == -1);
+						
+						if (columns[14] || columns[15] || columns[16] || columns[17]) {
+							mark = new Mark();
+							
+							let text = "";
+							if (columns[14].length > 0) text = columns[14];
+							else if (columns[15].length > 0) text = columns[15];
+							else if (columns[16].length > 0) text = columns[16];
+							else if (columns[17].length > 0) text = columns[17];
+							text = text.substring(0, text.indexOf("-")) + '-ALIVE';
+							mark.variable = getVariable(text);
+							mark.variable.value = false;
+							mark.isReverse = true;
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = 0x0000ff;
+							layoutObject.marks.push(mark);
+						}
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[14]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[20]));
+						mark.style.text = columns[24];
+						layoutObject.marks.push(mark);
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[15]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[21]));
+						mark.style.text = columns[25];
+						layoutObject.marks.push(mark);
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[16]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[22]));
+						mark.style.text = columns[26];
+						layoutObject.marks.push(mark);
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[17]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[23]));
+						mark.style.text = columns[27];
+						layoutObject.marks.push(mark);
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Nama Peralatan":
+						layoutObject = new RectObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.baseStyle.text = columns[15];
+						
+						layoutObject.baseStyle.isUseFill = false;
+						
+						layoutObject.baseStyle.isUseLine = false;
+						
+						layoutObject.baseStyle.isUseText = true;
+						layoutObject.baseStyle.text = columns[15];
+						layoutObject.baseStyle.fontColor = 0xffffff;
+						layoutObject.baseStyle.fontSize = 8.0;
+						layoutObject.baseStyle.fontFamily = "Arial";
+						layoutObject.baseStyle.isFontBold = false;
+						layoutObject.baseStyle.isFontItalic = false;
+						layoutObject.baseStyle.isFontUnderline = false;
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Kotak/Track":
+						switch (parseInt(columns[10])) {
+							case 1: // Persegi Standar
+							layoutObject = new RectObject();
+							break;
+							case 2: // Miring Kanan
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Right;
+							break;
+							case 3: // Miring Kiri
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Left;
+							break;
+							case 4: // Persegi Standar Arsir - Note: Belum bisa arsip
+							layoutObject = new RectObject();
+							break;
+							case 5: // Miring Kanan Arsir - Note: Belum bisa arsip
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Right;
+							break;
+							case 6: // Miring Kiri Arsir - Note: Belum bisa arsip
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Left;
+							break;
+							case 7: // Persegi Standar - Garis Tepi
+							layoutObject = new RectObject();
+							break;
+						}
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.isHideNA = parseInt(columns[23]);
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = BGRToRGB(parseInt(columns[24]));
+						
+						layoutObject.baseStyle.isUseLine = (parseInt(columns[10]) == 7);
+						
+						layoutObject.baseStyle.isUseText = false;
+						
+						if (columns[14] || columns[15] || columns[16] || columns[17]) {
+							mark = new Mark();
+							
+							let text = "";
+							if (columns[14].length > 0) text = columns[14];
+							else if (columns[15].length > 0) text = columns[15];
+							else if (columns[16].length > 0) text = columns[16];
+							else if (columns[17].length > 0) text = columns[17];
+							text = text.substring(0, text.indexOf("-")) + '-ALIVE';
+							mark.variable = getVariable(text);
+							mark.variable.value = false;
+							mark.isReverse = true;
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = 0x0000ff;
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[14]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[14]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[19]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[15]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[15]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[20]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[16]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[16]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[21]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[17]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[17]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[22]));
+							layoutObject.marks.push(mark);
+						}
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Poligon":
+						switch (parseInt(columns[10])) {
+							case 1: // Panah Kanan
+							layoutObject = new TriangleObject();
+							layoutObject.dir = Direction.Right;
+							break;
+							case 2: // Panah Kiri
+							layoutObject = new TriangleObject();
+							layoutObject.dir = Direction.Left;
+							break;
+							case 3: // Speed Indicator
+							layoutObject = new DiamondObject();
+							break;
+							case 4: // Miring Kanan
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Right;
+							break;
+							case 5: // Miring Kiri
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Left;
+							break;
+							case 6: // Miring Kanan Arsir - Note: Belum bisa arsip
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Right;
+							break;
+							case 7: // Miring Kiri Arsir - Note: Belum bisa arsip
+							layoutObject = new ParallelogramObject();
+							layoutObject.size = parseInt(columns[26]);
+							layoutObject.dir = Direction.Left;
+							break;
+							case 8: // Panah Atas
+							layoutObject = new TriangleObject();
+							layoutObject.dir = Direction.Up;
+							break;
+							case 9: // Panah Atas
+							layoutObject = new TriangleObject();
+							layoutObject.dir = Direction.Down;
+							break;
+						}
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.isHideNA = parseInt(columns[23]);
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = BGRToRGB(parseInt(columns[24]));
+						
+						layoutObject.baseStyle.isUseLine = false;
+						
+						layoutObject.baseStyle.isUseText = false;
+						
+						if (columns[14] || columns[15] || columns[16] || columns[17]) {
+							mark = new Mark();
+							
+							let text = "";
+							if (columns[14].length > 0) text = columns[14];
+							else if (columns[15].length > 0) text = columns[15];
+							else if (columns[16].length > 0) text = columns[16];
+							else if (columns[17].length > 0) text = columns[17];
+							text = text.substring(0, text.indexOf("-")) + '-ALIVE';
+							mark.variable = getVariable(text);
+							mark.variable.value = false;
+							mark.isReverse = true;
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = 0x0000ff;
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[14]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[14]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[19]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[15]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[15]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[20]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[16]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[16]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[21]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[17]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[17]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[22]));
+							layoutObject.marks.push(mark);
+						}
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Elip":
+						layoutObject = new EllipseObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.isHideNA = parseInt(columns[23]);
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = BGRToRGB(parseInt(columns[24]));
+						
+						layoutObject.baseStyle.isUseLine = false;
+						
+						layoutObject.baseStyle.isUseText = false;
+						
+						if (columns[14] || columns[15] || columns[16] || columns[17]) {
+							mark = new Mark();
+							
+							let text = "";
+							if (columns[14].length > 0) text = columns[14];
+							else if (columns[15].length > 0) text = columns[15];
+							else if (columns[16].length > 0) text = columns[16];
+							else if (columns[17].length > 0) text = columns[17];
+							text = text.substring(0, text.indexOf("-")) + '-ALIVE';
+							mark.variable = getVariable(text);
+							mark.variable.value = false;
+							mark.isReverse = true;
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = 0x0000ff;
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[14]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[14]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[19]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[15]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[15]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[20]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[16]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[16]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[21]));
+							layoutObject.marks.push(mark);
+						}
+						
+						if (columns[17]) {
+							mark = new Mark();
+							mark.variable = getVariable(columns[17]);
+							mark.style = layoutObject.baseStyle.clone();
+							mark.style.fillColor = BGRToRGB(parseInt(columns[22]));
+							layoutObject.marks.push(mark);
+						}
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Gambar Bitmap":
+						if (columns[24].toLowerCase().indexOf('sinyal') < 0) continue;
+						
+						layoutObject = new SignalBackgroundObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.baseAspectCount = 0;
+						if (columns[24].toLowerCase().indexOf('1_aspek') >= 0) layoutObject.baseAspectCount = 1;
+						if (columns[24].toLowerCase().indexOf('2_aspek') >= 0) layoutObject.baseAspectCount = 2;
+						if (columns[24].toLowerCase().indexOf('3_aspek') >= 0) layoutObject.baseAspectCount = 3;
+						if (columns[24].toLowerCase().indexOf('emergency') >= 0) layoutObject.baseAspectCount += 1;
+						layoutObject.isUseCFAspect = (columns[24].toLowerCase().indexOf('contraflow') >= 0);
+						layoutObject.isUseShunterAspect = (columns[24].toLowerCase().indexOf('langsir') >= 0);
+						
+						if (columns[24].toLowerCase().indexOf('-000') >= 0) layoutObject.angle = 000;
+						if (columns[24].toLowerCase().indexOf('-045') >= 0) layoutObject.angle = 045;
+						if (columns[24].toLowerCase().indexOf('-090') >= 0) layoutObject.angle = 090;
+						if (columns[24].toLowerCase().indexOf('-135') >= 0) layoutObject.angle = 135;
+						if (columns[24].toLowerCase().indexOf('-180') >= 0) layoutObject.angle = 180;
+						if (columns[24].toLowerCase().indexOf('-225') >= 0) layoutObject.angle = 225;
+						if (columns[24].toLowerCase().indexOf('-270') >= 0) layoutObject.angle = 270;
+						if (columns[24].toLowerCase().indexOf('-315') >= 0) layoutObject.angle = 315;
+						
+						if ((columns[24].toLowerCase().indexOf('-045') >= 0) ||
+							(columns[24].toLowerCase().indexOf('-135') >= 0) ||
+							(columns[24].toLowerCase().indexOf('-225') >= 0) ||
+							(columns[24].toLowerCase().indexOf('-315') >= 0)) {
+							layoutObject.h = 21;
+							if (activeView.options) {
+								if (activeView.options.signalHigh) {
+									layoutObject.h = activeView.options.signalHigh;
+								}
+							}
+							const a = Math.sqrt(Math.pow(layoutObject.h,2)/2);
+							const d = parseInt(columns[6]) - a;
+							layoutObject.w = Math.sqrt((d*d) + (d*d));
+							layoutObject.point.x += (parseInt(columns[7])/2) - (layoutObject.w/2);
+							layoutObject.point.y += (parseInt(columns[6])/2) - (layoutObject.h/2);
+						}
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Tombol Tekan/PushButton":
+						layoutObject = new RectObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = 0xcccccc;
+						
+						layoutObject.baseStyle.isUseLine = true;
+						
+						layoutObject.baseStyle.isUseText = true;
+						layoutObject.baseStyle.text = columns[17];
+						layoutObject.baseStyle.fontColor = 0x000000;
+						layoutObject.baseStyle.fontSize = 8.0;
+						layoutObject.baseStyle.fontFamily = "Arial";
+						layoutObject.baseStyle.isFontBold = true;
+						layoutObject.baseStyle.isFontItalic = false;
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[15]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[18]));
+						layoutObject.marks.push(mark);
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[16]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[19]));
+						layoutObject.marks.push(mark);
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Tombol Togel":
+						layoutObject = new RectObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = 0xcccccc;
+						
+						layoutObject.baseStyle.isUseLine = true;
+						
+						layoutObject.baseStyle.isUseText = true;
+						layoutObject.baseStyle.text = columns[17];
+						layoutObject.baseStyle.fontColor = 0x000000;
+						layoutObject.baseStyle.fontSize = 8.0;
+						layoutObject.baseStyle.fontFamily = "Arial";
+						layoutObject.baseStyle.isFontBold = true;
+						layoutObject.baseStyle.isFontItalic = false;
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[15]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[18]));
+						layoutObject.marks.push(mark);
+						
+						mark = new Mark();
+						mark.variable = getVariable(columns[16]);
+						mark.style = layoutObject.baseStyle.clone();
+						mark.style.fillColor = BGRToRGB(parseInt(columns[19]));
+						layoutObject.marks.push(mark);
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					case "Tombol Pasangan":
+						layoutObject = new RectObject();
+						layoutObject.point.x = parseInt(columns[4]) + x;
+						layoutObject.point.y = parseInt(columns[5]) + y;
+						layoutObject.w = parseInt(columns[7]);
+						layoutObject.h = parseInt(columns[6]);
+						layoutObject.desc = columns[9];
+						
+						layoutObject.baseStyle.isUseFill = true;
+						layoutObject.baseStyle.fillColor = 0xcccccc;
+						
+						layoutObject.baseStyle.isUseLine = true;
+						
+						layoutObject.baseStyle.isUseText = true;
+						layoutObject.baseStyle.text = columns[16];
+						layoutObject.baseStyle.fontColor = 0x000000;
+						layoutObject.baseStyle.fontSize = 8.0;
+						layoutObject.baseStyle.fontFamily = "Arial";
+						layoutObject.baseStyle.isFontBold = true;
+						layoutObject.baseStyle.isFontItalic = false;
+						
+						layoutObjects.push(layoutObject);
+						layoutObject.addAt(app.stage);
+						break;
+					}
+				}
+			}
+			
+			function refreshLayoutView() {
+				for (const layoutObject of layoutObjects) {
+					layoutObject.reDraw(oriPoint, app.screen.width, app.screen.height, scale);
+				}
+				
+				$("#status").text("x:" + oriPoint.x.toFixed(3) + ", y:" + oriPoint.y.toFixed(3) + ", s:" + scale.toFixed(3) + ", w:" + (app.screen.width/scale).toFixed(3) + ", h:" + (app.screen.height/scale).toFixed(3));
+			}
+			
+			function resizeView() {
+				app.renderer.resize(window.innerWidth, window.innerHeight);
+			}
+			
+			function refreshAlarmView() {
+				$('#alarmList li').remove();
+				
+				let counter = 0;
+				for (const region of regions) {
+					if (region.alarms.length > 0) {
+						$("#alarmList").append('<li><a href="#" onclick="moveViewTo('+ region.point.x + ',' + region.point.y + ',' + region.w + ',' + region.h + '); return false;"><b>'+ region.name + " (" + region.code + ")" +'<b></a></li>');
+						for (alarm of region.alarms) {
+							$("#alarmList").append('<li><a href="#" onclick="moveViewTo('+ region.point.x + ',' + region.point.y + ',' + region.w + ',' + region.h + '); return false;">'+ alarm.desc + "<br>" + alarm.datetime +'</a></li>');
+							counter++;
+						}
+					}
+				}
+				
+				if (counter > 0) {
+					$('#alarmButton').addClass("badge-notif");
+					$('#alarmButton').attr('data-badge',((counter > 99) ? 99 : counter));
+				} else {
+					$('#alarmButton').removeClass("badge-notif");
+					$('#alarmButton').attr('data-badge',0);
+				}
+			}
+
+			// Listener
+			window.addEventListener('resize', resizeView);
+			
+			content.addEventListener('mousedown', downListener);
+			content.addEventListener('mousemove', moveListener);
+			content.addEventListener('mouseup', upListener);
+			content.addEventListener('wheel', wheelListener);
+			
+			content.addEventListener('touchstart', downListener);
+			content.addEventListener('touchmove', moveListener);
+			content.addEventListener('touchend', upListener);
+			content.addEventListener('touchcancel', upListener);
+	
+			const socketIp = window.location.hostname;//'10.10.8.180'; //'localhost'; //'10.10.8.66';
+			const socketPort = 4200;
+			let socket = null;
+			
+			let views = [];
+			let activeViewIndex = null;
+			let activeView = null;
+			
+			function setSocket() {
+				socket = io.connect('http://'+socketIp+':'+socketPort);
+				
+				socket.on('connect', function(data) {
+					socket.emit('getViews', 0xabcdef);
+				});
+				
+				socket.on('views', function(data) {
+					views = data;
+					setMenu();
+					if (!activeViewIndex) activeViewIndex = 0;
+					socket.emit('getView', activeViewIndex);
+				});
+				
+				socket.on('view', function(data) {
+					activeView = data;
+					variables = new Array();
+					regions = new Array();
+					removeAllChild(app.stage);
+					
+					setOri();
+					
+					for (const region of activeView.regions) {
+						setRegion(region);
+					}
+					
+					layoutObjects = new Array();
+					for (const layout of activeView.layouts) {
+						setLayout(layout.fileText, layout.x, layout.y);
+					}
+					
+					resizeView();
+					refreshLayoutView();
+				});
+				
+				socket.on('datas', function(data) {
+					for (let region of regions) {
+						if (!(region.code in data)) {
+							continue;
+						}
+						
+						const base = 16;
+						for (let i=0; i<data[region.code].data.length; i++) {
+							const binString = DECToBIN(data[region.code].data[i]);
+							for (let j=0; j<base; j++) {
+								if ((j+(i*base)) >= region.variables.length) {
+									break;
+								}
+								if(binString.length > j) {
+									region.variables[j+(i*base)].value = (binString[binString.length-1-j] == "1");
+								} else {
+									region.variables[j+(i*base)].value = false;
+								}
+							}
+						}
+						
+						region.alarms = data[region.code].alarm;
+					}
+					refreshAlarmView();
+					refreshLayoutView();
+				});
+				
+				setInterval(function() {
+					let values = [];
+					for (const region of regions) {
+						values.push(region.code);
+					}
+					socket.emit('getDatas', values);
+				}, 1000/24);
+			}
+			
+			// Run
+			
+			<!-- setDummyData(); -->
+			
+			setSocket();
+			
+			resizeView();
+			refreshLayoutView();
+			
+			
+			//
+			function setDummyData() {
+				<!-- for (i=0; i<10; i++) { -->
+					<!-- let layoutObject; -->
+					<!-- switch (i%12) { -->
+						<!-- case 0: -->
+							<!-- layoutObject = new RectObject(); -->
+							<!-- break; -->
+						<!-- case 1: -->
+							<!-- layoutObject = new RoundRectObject(); -->
+							<!-- break; -->
+						<!-- case 2: -->
+							<!-- layoutObject = new EllipseObject(); -->
+							<!-- break; -->
+						<!-- case 3: -->
+							<!-- layoutObject = new DiamondObject(); -->
+							<!-- break; -->
+						<!-- case 4: -->
+							<!-- layoutObject = new TriangleObject(); -->
+							<!-- layoutObject.dir = Direction.Right; -->
+							<!-- break; -->
+						<!-- case 5: -->
+							<!-- layoutObject = new TriangleObject(); -->
+							<!-- layoutObject.dir = Direction.Up; -->
+							<!-- break; -->
+						<!-- case 6: -->
+							<!-- layoutObject = new TriangleObject(); -->
+							<!-- layoutObject.dir = Direction.Left; -->
+							<!-- break; -->
+						<!-- case 7: -->
+							<!-- layoutObject = new TriangleObject(); -->
+							<!-- layoutObject.dir = Direction.Down; -->
+							<!-- break; -->
+						<!-- case 8: -->
+							<!-- layoutObject = new ParallelogramObject(); -->
+							<!-- layoutObject.dir = Direction.Right; -->
+							<!-- break; -->
+						<!-- case 9: -->
+							<!-- layoutObject = new ParallelogramObject(); -->
+							<!-- layoutObject.dir = Direction.Up; -->
+							<!-- break; -->
+						<!-- case 10: -->
+							<!-- layoutObject = new ParallelogramObject(); -->
+							<!-- layoutObject.dir = Direction.Left; -->
+							<!-- break; -->
+						<!-- case 11: -->
+							<!-- layoutObject = new ParallelogramObject(); -->
+							<!-- layoutObject.dir = Direction.Down; -->
+							<!-- break; -->
+					<!-- } -->
+					
+					<!-- let dis = 8; -->
+					<!-- layoutObject.w = 100; -->
+					<!-- layoutObject.h = 100; -->
+					<!-- layoutObject.point.x = 0 + ((layoutObject.w + dis) * (i%5)); -->
+					<!-- layoutObject.point.y = 0 + ((layoutObject.h + dis) * Math.floor(i/5)); -->
+					
+					<!-- layoutObjects.push(layoutObject); -->
+					<!-- layoutObject.addAt(app.stage); -->
+				<!-- } -->
+				
+				const signalBackgroundObject = new SignalBackgroundObject();
+				signalBackgroundObject.w = 68;
+				signalBackgroundObject.h = 21;
+					
+				layoutObjects.push(signalBackgroundObject);
+				signalBackgroundObject.addAt(app.stage);
+			}
+			
+		//});
+		</script>
+    </body>
+</html>

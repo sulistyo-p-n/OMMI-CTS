@@ -1,0 +1,329 @@
+{
+	"views" : [
+		{
+			"code" : "CTC-YK",
+			"name" : "CTC YOGYAKARTA (DAOP 6)",
+			"w" : 11520.0,
+			"h" : 3240.0,
+			"layouts" : [
+				{
+					"file" : "sources/CTC YK/layouts/DISPLAY1.csv",
+					"x" : 0.0,
+					"y" : 0.0
+				},
+				{
+					"file" : "sources/CTC YK/layouts/DISPLAY2.csv",
+					"x" : 3840.0,
+					"y" : 0.0
+				},
+				{
+					"file" : "sources/CTC YK/layouts/DISPLAY3.csv",
+					"x" : 3840.0,
+					"y" : 1080.0
+				},
+				{
+					"file" : "sources/CTC YK/layouts/DISPLAY4.csv",
+					"x" : 0.0,
+					"y" : 2160.0
+				},
+				{
+					"file" : "sources/CTC YK/layouts/DISPLAY5.csv",
+					"x" : 3840.0,
+					"y" : 2160.0
+				}
+			],
+			"options" : {
+				"signalHigh" : 21
+			},
+			"regions" : [
+				{
+					"code" : "WK",
+					"name" : "WALIKUKUN",
+					"x" : 0.0,
+					"y" : 220.0,
+					"w" : 2093.0,
+					"h" : 1097.0
+				},
+				{
+					"code" : "KDB",
+					"name" : "KEDUNGBANTENG",
+					"x" : -1283.0,
+					"y" : 220.0,
+					"w" : 2093.0,
+					"h" : 1097.0
+				},
+				{
+					"code" : "KRO",
+					"name" : "KEBONROMO",
+					"x" : -2436.0,
+					"y" : 220.0,
+					"w" : 2093.0,
+					"h" : 1097.0
+				},
+				{
+					"code" : "SR",
+					"name" : "SRAGEN",
+					"x" : -3909.0,
+					"y" : 220.0,
+					"w" : 2093.0,
+					"h" : 1097.0
+				},
+				{
+					"code" : "MSR",
+					"name" : "MASARAN",
+					"x" : -5342.0,
+					"y" : 220.0,
+					"w" : 2093.0,
+					"h" : 1097.0
+				},
+				{
+					"code" : "KMR",
+					"name" : "KEMIRI",
+					"x" : -6736.0,
+					"y" : 220.0,
+					"w" : 2093.0,
+					"h" : 1097.0
+				},
+				{
+					"code" : "PL",
+					"name" : "PALUR",
+					"x" : -6209.0,
+					"y" : -83.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "SK",
+					"name" : "SOLOJEBRES",
+					"x" : -7787.0,
+					"y" : 11.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "SLO",
+					"name" : "SOLO BALAPAN",
+					"x" : 0.0,
+					"y" : -110.0,
+					"w" : 3708.0,
+					"h" : 1944.0
+				},
+				{
+					"code" : "KDO",
+					"name" : "KADIPIRO",
+					"x" : 0.0,
+					"y" : -995.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "SMO",
+					"name" : "BANDARA ADI SOEMARMO",
+					"x" : -1294.0,
+					"y" : -1000.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "PWS",
+					"name" : "PURWOSARI",
+					"x" : -3011.0,
+					"y" : -597.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "GW",
+					"name" : "GAWOK",
+					"x" : -4342.0,
+					"y" : -538.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "DL",
+					"name" : "DELANGGU",
+					"x" : -5331.0,
+					"y" : -538.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "CE",
+					"name" : "CEPER",
+					"x" : -6557.0,
+					"y" : -538.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "KT",
+					"name" : "KLATEN",
+					"x" : -3690.0,
+					"y" : -1028.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "SWT",
+					"name" : "SROWOT",
+					"x" : -4964.0,
+					"y" : -1080.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "BBN",
+					"name" : "BRAMBANAN",
+					"x" : -6165.0,
+					"y" : -1080.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "MGW",
+					"name" : "MAGUWO",
+					"x" : -7700.0,
+					"y" : -1080.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "LPN",
+					"name" : "LEMPUYANGAN",
+					"x" : 0.0,
+					"y" : -1445.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "YK",
+					"name" : "YOGYAKARTA",
+					"x" : -1105.0,
+					"y" : -733.0,
+					"w" : 3370.0,
+					"h" : 1767.0
+				},
+				{
+					"code" : "PTN",
+					"name" : "PATUKAN",
+					"x" : -4206.0,
+					"y" : -1445.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "RWL",
+					"name" : "REWULU",
+					"x" : -4493.0,
+					"y" : -970.0,
+					"w" : 3604.0,
+					"h" : 1607.0
+				},
+				{
+					"code" : "STL",
+					"name" : "SENTOLO",
+					"x" : -288.0,
+					"y" : -1898.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "WT",
+					"name" : "WATES",
+					"x" : -1684.0,
+					"y" : -1909.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "KDG",
+					"name" : "KEDUNDANG",
+					"x" : -2704.0,
+					"y" : -1434.0,
+					"w" : 2785.0,
+					"h" : 1461.0
+				},
+				{
+					"code" : "YIA",
+					"name" : "YOGYAKARTA INTERNATIONAL AIRPORT",
+					"x" : -4785.0,
+					"y" : -1726.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "WJ",
+					"name" : "WOJO",
+					"x" : -4785.0,
+					"y" : -1961.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "JN",
+					"name" : "JENAR",
+					"x" : -6058.0,
+					"y" : -1959.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				},
+				{
+					"code" : "KTA",
+					"name" : "KUTOARJO",
+					"x" : -7694.0,
+					"y" : -1901.0,
+					"w" : 2302.0,
+					"h" : 1207.0
+				}
+			]
+		},
+		{
+			"code" : "CTC-MRS",
+			"name" : "CTC MAROS (MAKASSAR)",
+			"w" : 9600.0,
+			"h" : 2160.0,
+			"layouts" : [
+				{
+					"file" : "sources/CTC MRS/layouts/DISPLAY1.csv",
+					"x" : 0.0,
+					"y" : 0.0
+				},
+				{
+					"file" : "sources/CTC MRS/layouts/DISPLAY2.csv",
+					"x" : 0.0,
+					"y" : 1080.0
+				},
+				{
+					"file" : "sources/CTC MRS/layouts/DISPLAY3.csv",
+					"x" : 7680.0,
+					"y" : 0.0
+				}
+			],
+			"regions" : [
+			]
+		}
+	],
+	
+	"sources" : [
+		{
+			"id" : 1,
+			"commType" : "MODBUS-TCP",
+			"ip" : "10.10.3.134",
+			"port" : 502,
+			"addr" : 38,
+			"file" : "sources/CTC YK/variabels/SLO - Tabel Variabel.csv"
+		},
+		{
+			"id" : 12,
+			"commType" : "MODBUS-TCP",
+			"ip" : "10.10.3.132",
+			"port" : 502,
+			"addr" : 36,
+			"file" : "sources/CTC YK/variabels/YK - Tabel Variabel.csv"
+		}
+	],
+	
+	"receivers" : [
+	]
+}
