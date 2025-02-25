@@ -309,7 +309,7 @@
 		{
 			"id" : 1,
 			"commType" : "MODBUS-TCP",
-			"ip" : "10.10.3.134",
+			"ip" : "10.10.98.13",
 			"port" : 502,
 			"addr" : 38,
 			"file" : "sources/CTC YK/variabels/SLO - Tabel Variabel.csv"
@@ -317,7 +317,7 @@
 		{
 			"id" : 12,
 			"commType" : "MODBUS-TCP",
-			"ip" : "10.10.3.132",
+			"ip" : "10.10.98.135",
 			"port" : 502,
 			"addr" : 36,
 			"file" : "sources/CTC YK/variabels/YK - Tabel Variabel.csv"

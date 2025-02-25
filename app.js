@@ -63,7 +63,8 @@ function setConfig(config) {
 
     source.liveVariables = [];
     source.variables = [];
-    const rows = source.fileText.split("\r\n");
+    const rows = source.fileText.split("\n");
+
     for (let i = 3; i < rows.length; i++) {
       const row = rows[i];
       const columns = row.split(",");
